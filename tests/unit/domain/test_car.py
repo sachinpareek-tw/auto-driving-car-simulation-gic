@@ -1,9 +1,10 @@
-"""Unit tests for Car (move F, rotate L/R, command at step)."""
+"""Unit tests for Car (move F, rotate L/R, command at step, execute_command)."""
 
 import pytest
-from src.domain.car import Car, CMD_LEFT, CMD_RIGHT, CMD_FORWARD
-from src.domain.position import Position
+from src.domain.car import Car, CommandResult, CMD_LEFT, CMD_RIGHT, CMD_FORWARD
 from src.domain.direction import Direction
+from src.domain.field import Field
+from src.domain.position import Position
 
 
 def test_car_position_after_forward_north() -> None:
@@ -56,3 +57,47 @@ def test_car_get_command_at_step() -> None:
     assert car.get_command_at_step(9) == CMD_LEFT
     assert car.get_command_at_step(10) is None
     assert car.get_command_at_step(-1) is None
+
+
+def test_execute_command_none() -> None:
+    field = Field(5, 5)
+    car = Car("A", Position(1, 2), Direction.N, "F")
+    result = car.execute_command(None, field)
+    assert result.position == Position(1, 2)
+    assert result.updated_car is None
+
+
+def test_execute_command_left() -> None:
+    field = Field(5, 5)
+    car = Car("A", Position(1, 2), Direction.N, "L")
+    result = car.execute_command(CMD_LEFT, field)
+    assert result.position == Position(1, 2)
+    assert result.updated_car is not None
+    assert result.updated_car.direction == Direction.W
+    assert result.updated_car.position == Position(1, 2)
+
+
+def test_execute_command_right() -> None:
+    field = Field(5, 5)
+    car = Car("A", Position(1, 2), Direction.N, "R")
+    result = car.execute_command(CMD_RIGHT, field)
+    assert result.position == Position(1, 2)
+    assert result.updated_car is not None
+    assert result.updated_car.direction == Direction.E
+
+
+def test_execute_command_forward_in_bounds() -> None:
+    field = Field(5, 5)
+    car = Car("A", Position(1, 2), Direction.N, "F")
+    result = car.execute_command(CMD_FORWARD, field)
+    assert result.position == Position(1, 3)
+    assert result.updated_car is not None
+    assert result.updated_car.position == Position(1, 3)
+
+
+def test_execute_command_forward_out_of_bounds() -> None:
+    field = Field(3, 3)  # x,y in [0,2]
+    car = Car("A", Position(1, 2), Direction.N, "F")  # forward would go to (1,3)
+    result = car.execute_command(CMD_FORWARD, field)
+    assert result.position == Position(1, 2)
+    assert result.updated_car is None

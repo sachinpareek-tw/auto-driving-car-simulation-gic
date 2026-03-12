@@ -29,9 +29,9 @@ def add_car(
     name_clean = name.strip()
     if not name_clean:
         return None, "Car name cannot be empty"
-    for c in cars:
-        if c.name == name_clean:
-            return None, f"Duplicate car name: {name_clean}"
+    car_names = {c.name for c in cars}
+    if name_clean in car_names:
+        return None, f"Duplicate car name: {name_clean}"
     car = Car(name=name_clean, position=position, direction=direction, commands=commands)
     return cars + [car], None
 

@@ -54,6 +54,17 @@ def test_add_car_empty_name_rejected() -> None:
     assert err is not None
 
 
+def test_add_car_position_out_of_bounds_rejected() -> None:
+    field = Field(10, 10)
+    cars: list[Car] = []
+    new_cars, err = add_car(
+        field, cars, "A", Position(0, 11), Direction.E, "F"
+    )
+    assert new_cars is None
+    assert err is not None
+    assert "within field bounds" in (err or "")
+
+
 def test_run_simulation_returns_result() -> None:
     field = Field(10, 10)
     cars = [Car("A", Position(1, 2), Direction.N, "FF")]

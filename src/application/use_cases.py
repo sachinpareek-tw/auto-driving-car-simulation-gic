@@ -32,6 +32,8 @@ def add_car(
     car_names = {c.name for c in cars}
     if name_clean in car_names:
         return None, f"Duplicate car name: {name_clean}"
+    if not field.is_within_bounds(position):
+        return None, "Initial position must be within field bounds."
     car = Car(name=name_clean, position=position, direction=direction, commands=commands)
     return cars + [car], None
 

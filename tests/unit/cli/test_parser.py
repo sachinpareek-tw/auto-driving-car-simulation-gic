@@ -17,6 +17,8 @@ def test_parse_field_dimensions_invalid() -> None:
     assert parse_field_dimensions("x y") is None
     assert parse_field_dimensions("0 10") is None
     assert parse_field_dimensions("10 0") is None
+    assert parse_field_dimensions("0 -1") is None
+    assert parse_field_dimensions("0 99") is None
 
 
 def test_parse_position_direction_valid() -> None:
@@ -29,6 +31,8 @@ def test_parse_position_direction_invalid() -> None:
     assert parse_position_direction("1 2") is None
     assert parse_position_direction("1 2 X") is None
     assert parse_position_direction("a 2 N") is None
+    assert parse_position_direction("0 E") is None
+    assert parse_position_direction("0 3 glskdjf") is None
 
 
 def test_parse_commands() -> None:

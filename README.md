@@ -2,6 +2,10 @@
 
 CLI simulation for autonomous driving cars on a rectangular field: add cars, run commands (L/R/F), and detect collisions.
 
+## About the submission
+
+Python 3.9+ and Poetry are required. After installing dependencies, run the CLI or tests as below.
+
 ## Quick start
 
 **Install** (creates venv and installs deps):
@@ -266,3 +270,17 @@ Using the example above:
 If some cars collide at certain step, then collided cars stop moving and no longer process further commands.
 
 If cars do not have collision, then the system will print the final positions following example in Scenario 1.
+
+---
+
+## Implementation notes
+
+- **Field** holds width and height and provides bounds checking. **Car** holds name, position, direction, and command string; it can compute the result of a single command (L/R/F) and the next position, given the field bounds.
+- **Simulation** is orchestrated by a service layer: at each step, one command is processed per car; proposed positions are checked for collisions before being applied; cars that collide stop and no longer process commands.
+- Commands are stored as a string, preserving order. Out-of-bounds **F** is ignored (car stays in place).
+- **Start over** re-prompts for field dimensions and clears cars, matching the spec flow.
+
+### Future improvements
+
+- A pluggable simulator or collision strategy could be injected (e.g. collision detection before moving into a coordinate).
+- CLI could support a navigable menu (e.g. go back to previous step) for better UX.

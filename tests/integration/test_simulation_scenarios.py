@@ -50,3 +50,27 @@ def test_simulation_3_collision_at_step_2() -> None:
     assert result.has_collision
     assert "- D, collides with K at (3,2) at step 2" in out
     assert "- K, collides with D at (3,2) at step 2" in out
+
+
+def test_spec_example_single_car_a_final_position() -> None:
+    """Spec example Scenario 1: Car A (1,2) N FFRFFFFRRL → (5,4) S."""
+    field = Field(10, 10)
+    cars = [Car("A", Position(1, 2), Direction.N, "FFRFFFFRRL")]
+    result = run_simulation(field, cars)
+    out = format_simulation_result(result, cars)
+    assert not result.has_collision
+    assert "- A, (5,4) S" in out
+
+
+def test_spec_example_two_cars_collision_at_step_7() -> None:
+    """Spec example Scenario 2: A (1,2) N FFRFFFFRRL, B (7,8) W FFLFFFFFFF → collision at (5,4) at step 7."""
+    field = Field(10, 10)
+    cars = [
+        Car("A", Position(1, 2), Direction.N, "FFRFFFFRRL"),
+        Car("B", Position(7, 8), Direction.W, "FFLFFFFFFF"),
+    ]
+    result = run_simulation(field, cars)
+    out = format_simulation_result(result, cars)
+    assert result.has_collision
+    assert "- A, collides with B at (5,4) at step 7" in out
+    assert "- B, collides with A at (5,4) at step 7" in out

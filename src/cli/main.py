@@ -87,7 +87,7 @@ def _do_add_car(
     pos_line = input_func("").strip()
     parsed = parse_position_direction(pos_line)
     if parsed is None:
-        print_func("Invalid format. Please enter x y Direction (e.g. 1 2 N). Only N, S, E, W allowed.")
+        print_func("Only N, S, W, E (representing North, South, West, East) are allowed for direction.")
         return
     position, direction = parsed
     print_func(f"Please enter the commands for car {name}:")

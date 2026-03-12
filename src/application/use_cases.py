@@ -38,7 +38,17 @@ def add_car(
     return cars + [car], None
 
 
+class SimulationService:
+    """Service for running simulations. Accepts an optional engine for dependency injection."""
+
+    def __init__(self, engine: Optional[SimulationEngine] = None) -> None:
+        self.engine = engine or SimulationEngine()
+
+    def run_simulation(self, field: Field, cars: List[Car]) -> SimulationResult:
+        """Run the simulation for all cars. Returns final positions or collision records."""
+        return self.engine.run(field, cars)
+
+
 def run_simulation(field: Field, cars: List[Car]) -> SimulationResult:
     """Run the simulation for all cars. Returns final positions or collision records."""
-    engine = SimulationEngine()
-    return engine.run(field, cars)
+    return SimulationService().run_simulation(field, cars)
